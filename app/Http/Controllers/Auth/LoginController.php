@@ -29,7 +29,7 @@ class LoginController extends Controller
             // セッションIDを再生成(セキュリティ対策)
             $request->session()->regenerate();
 
-            return redirect('/home');
+            return redirect()->route('dashboard');
         }
 
         return back()->withErrors([

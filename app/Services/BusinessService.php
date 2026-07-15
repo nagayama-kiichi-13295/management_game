@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\BusinessLog;
 use App\Models\Shop;
+use App\Models\ShopSkill;
+use App\Services\SkillService;
 
 class BusinessService
 {
@@ -40,5 +42,23 @@ class BusinessService
             'expense' => $expense,
             'profit' => $profit,
         ];
+
+        $skillService = app(SkillService::class);
+        $shopSkills = $shop->shopSkills;
+        foreach ($shopSkills as $shopSkill) {
+            switch($shopSkill->skill->key){
+                case 'cooking':
+                    $skillService->addExp($shopSkill, 2);
+                    break;
+                
+                case 'service':
+                    $skillService->addExp($shopSkill, 1);
+                    break;
+                
+                case 'management':
+                    $skillService->addExp($shopSkill, 1);
+                    break;
+            }
+        }
     }
 }

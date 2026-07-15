@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Game\DashboardController;
 use App\Http\Controllers\Game\ShopController;
+use App\Http\Controllers\Game\BusinessController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,4 +37,7 @@ Route::middleware('auth')->prefix('game')->group(function () {
     
     Route::post('/shops', [ShopController::class, 'store'])
         ->name('shops.store');
+
+    Route::post('/business', [BusinessController::class, 'store'])
+        ->name('business.store');
 });

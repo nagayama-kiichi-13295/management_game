@@ -6,4 +6,9 @@
     <p>{{ $shop->day }} 日目</p>
     <p>店舗Lv: {{ $shop->shop_level }}</p>
     <p>評判: {{ $shop->reputation }}</p>
+
+    <form action="{{ route('business.store') }}" method="post">
+        @csrf
+        <button>営業する</button>
+    </form>
 @endsection

@@ -12,11 +12,15 @@ class Shop extends Model
         'money',
         'day',
         'reputation',
-        'shop_level',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function businessLogs()
+    {
+        return $this->hasMany(BusinessLog::class);
     }
 }

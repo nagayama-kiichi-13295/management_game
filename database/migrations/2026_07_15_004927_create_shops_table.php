@@ -20,13 +20,11 @@ return new class extends Migration
             
             $table->string('shop_name');
 
-            $table->integer('money')->default(500000);
+            $table->integer('money')->default(150000);
 
             $table->integer('day')->default(1);
 
             $table->integer('reputation')->default(0);
-
-            $table->integer('shop_level')->default(1);
 
             $table->timestamps();
         });

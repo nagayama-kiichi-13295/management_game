@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Game;
 
 use App\Http\Controllers\Controller;
+use App\Services\ShopService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,15 +14,16 @@ class ShopController extends Controller
         return view('shops.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, ShopService $shopService)
     {
         $request->validate([
             'shop_name' => 'required|max:30',
         ]);
 
-        Auth::user()->shops()->create([
-            'shop_name' => $request->shop_name,
-        ]);
+        $shopService->createShop(
+            Auth::user(),
+            $request->shop_name
+        );
 
         return redirect()->route('dashboard');
     }

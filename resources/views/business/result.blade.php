@@ -3,6 +3,10 @@
 @section('title', '営業結果')
 
 @section('content')
+
+    <h3>今日の行動</h3>
+    <p>{{ $result['action'] }}</p>
+    
     <h1>営業結果</h1>
 
     <hr>

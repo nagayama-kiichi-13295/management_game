@@ -4,8 +4,6 @@ namespace App\Services;
 
 use App\Models\BusinessLog;
 use App\Models\Shop;
-use App\Models\ShopSkill;
-use App\Services\SkillService;
 
 class BusinessService
 {
@@ -14,45 +12,109 @@ class BusinessService
         private SkillService $skillService
     ) {}
 
-    public function run(Shop $shop)
+    public function run(Shop $shop, string $action)
     {
-        // イベント取得
+        // -----------------------------
+        // イベント
+        // -----------------------------
         $event = $this->eventService->randomEvent();
 
-        // 来客数
+        // -----------------------------
+        // 基本値
+        // -----------------------------
         $customers = random_int(35, 45);
         $customers = (int)($customers * $event['customer_rate']);
 
-        // 客単価
         $unitPrice = 800;
 
-        // 売り上げ
+        $extraExpense = 0;
+
+        $actionMessage = '';
+
+        // -----------------------------
+        // 今日の行動
+        // -----------------------------
+        switch ($action) {
+
+            case 'advertise':
+
+                $customers = (int)($customers * 1.2);
+
+                $extraExpense = 5000;
+
+                $actionMessage = '広告を出して集客しました。';
+
+                break;
+
+            case 'clean':
+
+                $shop->reputation += 3;
+
+                $actionMessage = '店内を掃除して評判が上がりました。';
+
+                break;
+
+            case 'study':
+
+                $cooking = $shop->shopSkills()
+                    ->whereHas('skill', function ($q) {
+                        $q->where('key', 'cooking');
+                    })
+                    ->first();
+
+                if ($cooking) {
+                    $this->skillService->addExp($cooking, 10);
+                }
+
+                $actionMessage = '料理の研究をしました。';
+
+                break;
+
+            default:
+
+                $actionMessage = '通常営業を行いました。';
+
+                break;
+        }
+
+        // -----------------------------
+        // 売上計算
+        // -----------------------------
         $sales = $customers * $unitPrice;
 
-        // 仕入れ
-        $expense = (int)($sales * 0.35) * $event['expense_rate'];
+        $expense = (int)($sales * 0.35);
 
-        // 利益
+        $expense = (int)($expense * $event['expense_rate']);
+
+        $expense += $extraExpense;
+
         $profit = $sales - $expense;
 
+        // -----------------------------
         // 店舗更新
+        // -----------------------------
         $shop->money += $profit;
         $shop->day += 1;
         $shop->reputation += $event['reputation'];
         $shop->save();
 
+        // -----------------------------
+        // 営業履歴
+        // -----------------------------
         BusinessLog::create([
-            'shop_id' => $shop->id,
-            'day' => $shop->day,
+            'shop_id'   => $shop->id,
+            'day'       => $shop->day,
             'customers' => $customers,
-            'sales' => $sales,
-            'expense' => $expense,
-            'profit' => $profit,
-            'weather' => '晴れ',
-            'event' => $event['name'],
+            'sales'     => $sales,
+            'expense'   => $expense,
+            'profit'    => $profit,
+            'weather'   => '晴れ',
+            'event'     => $event['name'],
         ]);
 
+        // -----------------------------
         // スキル経験値
+        // -----------------------------
         foreach ($shop->shopSkills as $shopSkill) {
 
             switch ($shopSkill->skill->key) {
@@ -71,16 +133,19 @@ class BusinessService
             }
         }
 
+        // -----------------------------
         // 返却
+        // -----------------------------
         return [
-            'customers' => $customers,
-            'sales' => $sales,
-            'expense' => $expense,
-            'profit' => $profit,
-            'weather'=> '晴れ',
-            'event' => $event['name'],
+            'customers'  => $customers,
+            'sales'      => $sales,
+            'expense'    => $expense,
+            'profit'     => $profit,
+            'weather'    => '晴れ',
+            'event'      => $event['name'],
             'reputation' => $event['reputation'],
-            'comment' => $this->createComment($event['name'], $profit),
+            'comment'    => $this->createComment($event['name'], $profit),
+            'action'     => $actionMessage,
         ];
     }
 

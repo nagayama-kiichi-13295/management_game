@@ -9,6 +9,7 @@ use App\Http\Controllers\Game\ShopController;
 use App\Http\Controllers\Game\BusinessController;
 use App\Http\Controllers\Game\MenuController;
 use App\Http\Controllers\Game\UpgradeController;
+use App\Http\Controllers\Game\StaffController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -49,6 +50,7 @@ Route::middleware('auth')->prefix('game')->group(function () {
     Route::post('/menus/{menu}/develop', [MenuController::class, 'develop'])
         ->name('menus.develop');
 
+    // 設備強化
     Route::post('/upgrade/kitchen', [UpgradeController::class, 'kitchen'])
         ->name('upgrade.kitchen');
 
@@ -57,4 +59,14 @@ Route::middleware('auth')->prefix('game')->group(function () {
 
     Route::post('/upgrade/interior', [UpgradeController::class, 'interior'])
         ->name('upgrade.interior');
+
+    // 従業員雇用
+    Route::post('/staff/part-time', [StaffController::class, 'partTime'])
+        ->name('staff.part_time');
+
+    Route::post('/staff/veteran', [StaffController::class, 'veteran'])
+        ->name('staff.veteran');
+
+    Route::post('/staff/chef', [StaffController::class, 'chef'])
+        ->name('staff.chef');
 });

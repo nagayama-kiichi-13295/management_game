@@ -77,4 +77,52 @@
     </button>
 </form>
 
+<hr>
+
+<h2>👨‍🍳 従業員</h2>
+<!-- アルバイト -->
+ <p>
+    アルバイト(50.00円)
+    @if($shop->part_time_staff)
+        ✅ 雇用済み
+    @else
+        <form action="{{ route('staff.part_time') }}" method="post">
+            @csrf
+            <button type="submit">
+                雇う
+            </button>
+        </form>
+    @endif
+ </p>
+
+<!-- ベテラン店員 -->
+ <p>
+    ベテラン店員(120.00円)
+    @if($shop->veteran_staff)
+        ✅ 雇用済み
+    @else
+        <form action="{{ route('staff.veteran') }}" method="post">
+            @csrf
+            <button type="submit">
+                雇う
+            </button>
+        </form>
+    @endif
+ </p>
+
+<!-- 料理人 -->
+ <p>
+    料理人(200.00円)
+    @if($shop->chef_staff)
+        ✅ 雇用済み
+    @else
+        <form action="{{ route('staff.chef') }}" method="post">
+            @csrf
+            <button type="submit">
+                雇う
+            </button>
+        </form>
+    @endif
+ </p>
+
 @endsection

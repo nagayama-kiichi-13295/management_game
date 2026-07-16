@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ShopSkill;
+use App\Models\Menu;
 
 class Shop extends Model
 {
@@ -31,5 +32,10 @@ class Shop extends Model
     public function shopSkills()
     {
         return $this->hasMany(ShopSkill::class);
+    }
+
+    public function menus()
+    {
+        return $this->hasMany(Menu::class);
     }
 }

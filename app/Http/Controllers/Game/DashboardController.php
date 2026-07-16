@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function index(TimeService $timeService, RankService $rankService) 
-    {
+    public function index(
+        TimeService $timeService, 
+        RankService $rankService
+    ) {
         $shop = Auth::user()->shops()->first();
 
         if (!$shop) {
@@ -22,7 +24,7 @@ class DashboardController extends Controller
             'shop'   => $shop,
             'season' => $timeService->getSeason($shop->day),
             'week'   => $timeService->getWeek($shop->day),
-            'rank'   => $rankService->getRank($shop->reputation),
+            'rank'   => $rankService->getRank($shop),
         ]);
     }
 }

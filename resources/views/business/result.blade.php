@@ -6,6 +6,8 @@
 
     <h3>今日の行動</h3>
     <p>{{ $result['action'] }}</p>
+
+    <hr>
     
     <h1>営業結果</h1>
 
@@ -25,6 +27,7 @@
     <p>📦 仕入：{{ number_format($result['expense']) }} 円</p>
     <p>💵 利益：{{ number_format($result['profit']) }} 円</p>
     <p>⭐ 評判：+{{ $result['reputation'] }}</p>
+    <p>🏆 店舗ランク：{{ $rank }}</p>
 
     <hr>
 

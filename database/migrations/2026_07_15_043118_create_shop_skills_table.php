@@ -11,24 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shops', function (Blueprint $table) {
+        Schema::create('shop_skills', function (Blueprint $table) {
+            
             $table->id();
 
-            $table->foreignId('user_id')
+            $table->foreignId('shop_id')
                 ->constrained()
                 ->cascadeOnDelete();
-            
-            $table->string('shop_name');
 
-            $table->integer('money')->default(150000);
+            $table->foreignId('skill_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-            $table->integer('day')->default(1);
+            $table->integer('level')->default(1);
 
-            $table->integer('reputation')->default(0);
-
-            $table->integer('regular_customers')->default(0);
+            $table->integer('exp')->default(0);
 
             $table->timestamps();
+
+            $table->unique([
+                'shop_id',
+                'skill_id'
+            ]);
         });
     }
 
@@ -37,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shops');
+        Schema::dropIfExists('shop_skills');
     }
 };

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ShopSkill;
 
 class Shop extends Model
 {
@@ -22,5 +23,10 @@ class Shop extends Model
     public function businessLogs()
     {
         return $this->hasMany(BusinessLog::class);
+    }
+
+    public function shopSkills()
+    {
+        return $this->hasMany(ShopSkill::class);
     }
 }

@@ -26,6 +26,8 @@ return new class extends Migration
 
             $table->integer('reputation')->default(0);
 
+            $table->integer('regular_customers')->default(0);
+
             $table->timestamps();
         });
     }

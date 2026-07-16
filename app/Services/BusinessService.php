@@ -77,7 +77,31 @@ class BusinessService
             'sales' => $sales,
             'expense' => $expense,
             'profit' => $profit,
+            'weather'=> '晴れ',
             'event' => $event['name'],
+            'reputation' => $event['reputation'],
+            'comment' => $this->createComment($event['name'], $profit),
         ];
+    }
+
+    private function createComment(string $event, int $profit): string
+    {
+        if ($event === 'SNSで話題') {
+            return '今日はSNSで話題になり、お客様がたくさん来店しました！';
+        }
+
+        if ($event === '常連客来店') {
+            return '常連のお客様が多く、店内は終始にぎわっていました。';
+        }
+
+        if ($profit >= 30000) {
+            return '今日はかなり好調な営業でした！';
+        }
+
+        if ($profit >= 20000) {
+            return '安定した一日でした。';
+        }
+
+        return '今日は少し静かな営業でした。';
     }
 }

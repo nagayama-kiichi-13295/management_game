@@ -20,6 +20,7 @@ class BusinessController extends Controller
         );
 
         $shop->refresh();
+        $shop->load('shopSkills.skill');;
 
         return view('business.result', compact(
             'shop',

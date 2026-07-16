@@ -39,6 +39,40 @@ class BusinessService
             ->get();
 
         // -----------------------------
+        // メニュー効果
+        // -----------------------------
+        $customerBonus = 0;
+        $priceBonus = 0;
+        $reputationBonus = 0;
+        foreach ($developedMenus as $menu) {
+
+            switch ($menu->name) {
+
+                case 'ラーメン':
+                    $customerBonus += 5;
+                    break;
+
+                case 'チャーハン':
+                    $priceBonus += 50;
+                    break;
+
+                case '餃子':
+                    $reputationBonus += 1;
+                    break;
+
+                case '唐揚げ':
+                    $customerBonus += 3;
+                    break;
+
+                case 'オリジナルメニュー':
+                    $customerBonus += 3;
+                    $priceBonus += 30;
+                    $reputationBonus += 1;
+                    break;
+            }
+        }
+
+        // -----------------------------
         // 基本値
         // -----------------------------
         $customers = random_int(35, 45);
@@ -51,7 +85,7 @@ class BusinessService
         // -----------------------------
         // 開発済みメニュー効果
         // -----------------------------        
-        $customers += $developedMenus->count() * 2;
+        $customers += $customerBonus;
 
         switch ($season) {
 
@@ -72,13 +106,14 @@ class BusinessService
                 break;
         }
 
-        // テーブルの増設校歌
+        // テーブルの増設効果
         if ($shop->table_upgrade) {
             $customers += 5;
         }
 
         $unitPrice = 800;
         $unitPrice += $developedMenus->sum('popularity') * 5;
+        $unitPrice += $priceBonus;
 
         // 厨房改装効果
         if ($shop->kitchen_upgrade) {
@@ -154,6 +189,7 @@ class BusinessService
         $shop->money += $profit;
         $shop->day += 1;
         $shop->reputation += $event['reputation'];
+        $shop->reputation += $reputationBonus;
 
         // 内装効果
         if ($shop->interior_upgrade) {
@@ -202,7 +238,7 @@ class BusinessService
         // -----------------------------
         foreach ($developedMenus as $menu) {
             if ($menu->popularity < 100) {
-                
+
                 $menu->popularity += 1;
 
                 $menu->save();
@@ -226,7 +262,8 @@ class BusinessService
             'profit'     => $profit,
             'weather'    => $weather['name'],
             'event'      => $event['name'],
-            'reputation' => $event['reputation'],
+            'reputation' => $event['reputation'] + $reputationBonus + ($shop->interior_upgrade ? 1 : 0),
+            'menus'      => $developedMenus,
             'comment'    => $this->createComment($event['name'], $profit),
             'action'     => $actionMessage,
             'rank_up'    => $rankUp,

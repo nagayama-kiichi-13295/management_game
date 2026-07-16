@@ -32,7 +32,7 @@
     <hr>
     <h3>🍀 季節</h3>
     <p>{{ $result['season'] }}</p>
-    
+
     <h3>☀ 天気</h3>
     <p>{{ $result['weather'] }}</p>
 
@@ -81,6 +81,21 @@
         </li>
     </ul>
 
+    <hr>
+
+    <h3>開発済みメニュー</h3>
+    @if($result['menus']->isEmpty())
+        <p>まだ開発済みのメニューはありません。</p>
+    @else
+        <ul>
+            @foreach($result['menus'] as $menu)
+                <li>
+                    {{ $menu->name }}
+                    (人気度:{{ $menu->popularity }})
+                </li>
+            @endforeach
+        </ul>
+    @endif
     <hr>
 
     <h3>💬 店員コメント</h3>

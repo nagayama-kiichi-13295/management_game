@@ -29,7 +29,17 @@ class BusinessService
         $customers = random_int(35, 45);
         $customers = (int)($customers * $event['customer_rate']);
 
+        // テーブルの増設校歌
+        if ($shop->table_upgrade) {
+            $customers += 5;
+        }
+
         $unitPrice = 800;
+
+        // 厨房改装効果
+        if ($shop->kitchen_upgrade){
+            $unitPrice = (int)($unitPrice * 1.05);
+        }
 
         $extraExpense = 0;
 
@@ -100,6 +110,12 @@ class BusinessService
         $shop->money += $profit;
         $shop->day += 1;
         $shop->reputation += $event['reputation'];
+        
+        // 内装効果
+        if ($shop->interior_upgrade) {
+            $shop->reputation += 1;
+        }
+
         $shop->save();
 
         // -----------------------------

@@ -38,4 +38,37 @@
         営業開始
     </button>
 </form>
+
+<hr>
+
+<h2>設備投資</h2>
+
+<form action="{{ route('upgrade.kitchen') }}" method="post">
+    @csrf
+    <button
+        {{ $shop->kitchen_upgrade ? 'disabled' : '' }}>
+        厨房改装(100,000)円
+    </button>
+</form>
+
+<br>
+
+<form action="{{ route('upgrade.table') }}" method="post">
+    @csrf
+    <button
+        {{ $shop->table_upgrade ? 'disabled' : '' }}>
+        テーブル増設(80,000)円
+    </button>
+</form>
+
+<br>
+
+<form action="{{ route('upgrade.interior') }}" method="post">
+    @csrf
+    <button
+        {{ $shop->interior_upgrade ? 'disabled' : '' }}>
+        内装リニューアル(150,000)円
+    </button>
+</form>
+
 @endsection

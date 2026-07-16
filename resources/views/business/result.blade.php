@@ -62,6 +62,25 @@
 
     <hr>
 
+    <h3>設備状況</h3>
+
+    <ul>
+        <li>
+            厨房:
+            {{ $shop->kitchen_upgrade ? '✅ 改装済み' : '未改装' }}
+        </li>
+        <li>
+            テーブル:
+            {{ $shop->table_upgrade ? '✅ 増設済み' : '未増設' }}
+        </li>
+        <li>
+            内装:
+            {{ $shop->interior_upgrade ? '✅ リニューアル済み' : '未改装' }}
+        </li>
+    </ul>
+
+    <hr>
+
     <h3>💬 店員コメント</h3>
     <p>{{ $result['comment'] }}</p>
 

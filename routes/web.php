@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Game\DashboardController;
 use App\Http\Controllers\Game\ShopController;
 use App\Http\Controllers\Game\BusinessController;
+use App\Http\Controllers\Game\UpgradeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,4 +41,13 @@ Route::middleware('auth')->prefix('game')->group(function () {
 
     Route::post('/business', [BusinessController::class, 'store'])
         ->name('business.store');
+
+    Route::post('/upgrade/kitchen', [UpgradeController::class, 'kitchen'])
+        ->name('upgrade.kitchen');
+
+    Route::post('/upgrade/table', [UpgradeController::class, 'table'])
+        ->name('upgrade.table');
+
+    Route::post('/upgrade/interior', [UpgradeController::class, 'interior'])
+        ->name('upgrade.interior');
 });

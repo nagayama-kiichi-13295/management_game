@@ -13,6 +13,9 @@ class Shop extends Model
         'money',
         'day',
         'reputation',
+        'kitchen_upgrade',
+        'table_upgrade',
+        'interior_upgrade',
     ];
 
     public function user()

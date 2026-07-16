@@ -32,6 +32,13 @@ class BusinessService
         $season = $this->timeService->getSeason($shop->day);
 
         // -----------------------------
+        // 開発済みメニュー取得
+        // -----------------------------
+        $developedMenus = $shop->menus()
+            ->where('developed', true)
+            ->get();
+
+        // -----------------------------
         // 基本値
         // -----------------------------
         $customers = random_int(35, 45);
@@ -40,6 +47,11 @@ class BusinessService
             * $event['customer_rate']
             * $weather['customer_rate']
         );
+
+        // -----------------------------
+        // 開発済みメニュー効果
+        // -----------------------------        
+        $customers += $developedMenus->count() * 2;
 
         switch ($season) {
 
@@ -66,6 +78,7 @@ class BusinessService
         }
 
         $unitPrice = 800;
+        $unitPrice += $developedMenus->sum('popularity') * 5;
 
         // 厨房改装効果
         if ($shop->kitchen_upgrade) {
@@ -181,6 +194,18 @@ class BusinessService
                 case 'management':
                     $this->skillService->addExp($shopSkill, 1);
                     break;
+            }
+        }
+
+        // -----------------------------
+        // メニュー人気上昇
+        // -----------------------------
+        foreach ($developedMenus as $menu) {
+            if ($menu->popularity < 100) {
+                
+                $menu->popularity += 1;
+
+                $menu->save();
             }
         }
 

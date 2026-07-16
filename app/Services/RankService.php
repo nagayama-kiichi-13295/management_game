@@ -2,17 +2,28 @@
 
 namespace App\Services;
 
+use App\Models\Shop;
+
 class RankService
 {
-    public function getRank(int $reputation): string
+    public function getRank(Shop $shop): string
     {
-        if ($reputation >= 1000) return 'SS';
-        if ($reputation >= 600) return 'S';
-        if ($reputation >= 350) return 'A';
-        if ($reputation >= 180) return 'B';
-        if ($reputation >= 80) return 'C';
-        if ($reputation >= 30) return 'D';
+        if ($shop->money >= 3000000 && $shop->reputation >= 80) {
+            return '全国チェーン';
+        }
 
-        return 'E';
+        if ($shop->money >= 2000000 && $shop->reputation >= 60) {
+            return '名店';
+        }
+
+        if ($shop->money >= 1200000 && $shop->reputation >= 40) {
+            return '有名店';
+        }
+
+        if ($shop->money >= 700000 && $shop->reputation >= 20) {
+            return '人気店';
+        }
+
+        return '個人店';
     }
 }

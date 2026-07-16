@@ -146,6 +146,7 @@ class BusinessService
             'reputation' => $event['reputation'],
             'comment'    => $this->createComment($event['name'], $profit),
             'action'     => $actionMessage,
+            'rank_up'    => false,
         ];
     }
 

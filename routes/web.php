@@ -7,6 +7,9 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Game\DashboardController;
 use App\Http\Controllers\Game\ShopController;
 use App\Http\Controllers\Game\BusinessController;
+use App\Http\Controllers\Game\MenuController;
+use App\Http\Controllers\Game\UpgradeController;
+use App\Http\Controllers\Game\StaffController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,4 +43,30 @@ Route::middleware('auth')->prefix('game')->group(function () {
 
     Route::post('/business', [BusinessController::class, 'store'])
         ->name('business.store');
+    
+    Route::get('/menus', [MenuController::class, 'index'])
+        ->name('menus.index');
+    
+    Route::post('/menus/{menu}/develop', [MenuController::class, 'develop'])
+        ->name('menus.develop');
+
+    // 設備強化
+    Route::post('/upgrade/kitchen', [UpgradeController::class, 'kitchen'])
+        ->name('upgrade.kitchen');
+
+    Route::post('/upgrade/table', [UpgradeController::class, 'table'])
+        ->name('upgrade.table');
+
+    Route::post('/upgrade/interior', [UpgradeController::class, 'interior'])
+        ->name('upgrade.interior');
+
+    // 従業員雇用
+    Route::post('/staff/part-time', [StaffController::class, 'partTime'])
+        ->name('staff.part_time');
+
+    Route::post('/staff/veteran', [StaffController::class, 'veteran'])
+        ->name('staff.veteran');
+
+    Route::post('/staff/chef', [StaffController::class, 'chef'])
+        ->name('staff.chef');
 });

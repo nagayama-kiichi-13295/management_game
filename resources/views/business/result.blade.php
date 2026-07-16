@@ -3,9 +3,35 @@
 @section('title', '営業結果')
 
 @section('content')
-    <h1>営業結果</h1>
+
+    <h3>今日の行動</h3>
+    <p>{{ $result['action'] }}</p>
 
     <hr>
+    
+    <h1>営業結果</h1>
+
+    @if ($result['rank_up'])
+        <div style="
+            background:#fff3cd;
+            border:2px solid orange;
+            padding:20px;
+            text-align:center;
+            margin-bottom:20px;
+        ">
+
+            <h2>🎉 ランクアップ</h2>
+            <p>
+                お店が
+                <strong>{{ $rank }}</strong>
+                に昇格しました！
+            </p>
+        </div>
+    @endif
+
+    <hr>
+    <h3>🍀 季節</h3>
+    <p>{{ $result['season'] }}</p>
 
     <h3>☀ 天気</h3>
     <p>{{ $result['weather'] }}</p>
@@ -21,6 +47,7 @@
     <p>📦 仕入：{{ number_format($result['expense']) }} 円</p>
     <p>💵 利益：{{ number_format($result['profit']) }} 円</p>
     <p>⭐ 評判：+{{ $result['reputation'] }}</p>
+    <p>🏆 店舗ランク：{{ $rank }}</p>
 
     <hr>
 
@@ -35,6 +62,40 @@
         @endforeach
     </ul>
 
+    <hr>
+
+    <h3>設備状況</h3>
+
+    <ul>
+        <li>
+            厨房:
+            {{ $shop->kitchen_upgrade ? '✅ 改装済み' : '未改装' }}
+        </li>
+        <li>
+            テーブル:
+            {{ $shop->table_upgrade ? '✅ 増設済み' : '未増設' }}
+        </li>
+        <li>
+            内装:
+            {{ $shop->interior_upgrade ? '✅ リニューアル済み' : '未改装' }}
+        </li>
+    </ul>
+
+    <hr>
+
+    <h3>開発済みメニュー</h3>
+    @if($result['menus']->isEmpty())
+        <p>まだ開発済みのメニューはありません。</p>
+    @else
+        <ul>
+            @foreach($result['menus'] as $menu)
+                <li>
+                    {{ $menu->name }}
+                    (人気度:{{ $menu->popularity }})
+                </li>
+            @endforeach
+        </ul>
+    @endif
     <hr>
 
     <h3>💬 店員コメント</h3>

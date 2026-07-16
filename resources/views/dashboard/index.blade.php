@@ -41,6 +41,12 @@
 
 <hr>
 
+<a href="{{ route('menus.index') }}">
+    メニュー開発
+</a>
+
+<hr>
+
 <h2>設備投資</h2>
 
 <form action="{{ route('upgrade.kitchen') }}" method="post">

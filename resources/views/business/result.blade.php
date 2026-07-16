@@ -30,7 +30,9 @@
     @endif
 
     <hr>
-
+    <h3>🍀 季節</h3>
+    <p>{{ $result['season'] }}</p>
+    
     <h3>☀ 天気</h3>
     <p>{{ $result['weather'] }}</p>
 

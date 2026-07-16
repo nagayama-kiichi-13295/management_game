@@ -5,29 +5,60 @@ namespace App\Services;
 use App\Models\BusinessLog;
 use App\Models\Shop;
 use App\Services\RankService;
+use App\Services\TimeService;
 
 class BusinessService
 {
     public function __construct(
         private EventService $eventService,
+        private WeatherService $weatherService,
         private SkillService $skillService,
         private RankService $rankService,
+        private TimeService $timeService,
     ) {}
 
     public function run(Shop $shop, string $action)
     {
-        $beforeRank = $this->rankService->getRank($shop);    
+        $beforeRank = $this->rankService->getRank($shop);
 
         // -----------------------------
         // イベント
         // -----------------------------
         $event = $this->eventService->randomEvent();
 
+        // 天気
+        $weather = $this->weatherService->randomWeather();
+
+        $season = $this->timeService->getSeason($shop->day);
+
         // -----------------------------
         // 基本値
         // -----------------------------
         $customers = random_int(35, 45);
-        $customers = (int)($customers * $event['customer_rate']);
+        $customers = (int)(
+            $customers
+            * $event['customer_rate']
+            * $weather['customer_rate']
+        );
+
+        switch ($season) {
+
+            case '春':
+                $customers += 3;
+                break;
+
+            case '夏':
+                $customers += 6;
+                break;
+
+            case '秋':
+                $customers += 4;
+                break;
+
+            case '冬':
+                $customers -= 3;
+                break;
+        }
 
         // テーブルの増設校歌
         if ($shop->table_upgrade) {
@@ -37,7 +68,7 @@ class BusinessService
         $unitPrice = 800;
 
         // 厨房改装効果
-        if ($shop->kitchen_upgrade){
+        if ($shop->kitchen_upgrade) {
             $unitPrice = (int)($unitPrice * 1.05);
         }
 
@@ -110,7 +141,7 @@ class BusinessService
         $shop->money += $profit;
         $shop->day += 1;
         $shop->reputation += $event['reputation'];
-        
+
         // 内装効果
         if ($shop->interior_upgrade) {
             $shop->reputation += 1;
@@ -128,7 +159,7 @@ class BusinessService
             'sales'     => $sales,
             'expense'   => $expense,
             'profit'    => $profit,
-            'weather'   => '晴れ',
+            'weather'   => $weather['name'],
             'event'     => $event['name'],
         ]);
 
@@ -152,7 +183,7 @@ class BusinessService
                     break;
             }
         }
-        
+
         // 最新状態を取得
         $shop->refresh();
         $shop->load('shopSkills.skill');
@@ -168,12 +199,13 @@ class BusinessService
             'sales'      => $sales,
             'expense'    => $expense,
             'profit'     => $profit,
-            'weather'    => '晴れ',
+            'weather'    => $weather['name'],
             'event'      => $event['name'],
             'reputation' => $event['reputation'],
             'comment'    => $this->createComment($event['name'], $profit),
             'action'     => $actionMessage,
             'rank_up'    => $rankUp,
+            'season'     => $season,
         ];
     }
 

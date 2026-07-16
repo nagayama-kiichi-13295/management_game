@@ -16,15 +16,19 @@
             background:#fff3cd;
             border:2px solid orange;
             padding:20px;
+            text-align:center;
             margin-bottom:20px;
         ">
 
             <h2>🎉 ランクアップ</h2>
-            <p>お店のランクが上がりました！</p>
-            <h3>{{ $rank }}</h3>
+            <p>
+                お店が
+                <strong>{{ $rank }}</strong>
+                に昇格しました！
+            </p>
         </div>
     @endif
-    
+
     <hr>
 
     <h3>☀ 天気</h3>

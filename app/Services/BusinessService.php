@@ -4,16 +4,20 @@ namespace App\Services;
 
 use App\Models\BusinessLog;
 use App\Models\Shop;
+use App\Services\RankService;
 
 class BusinessService
 {
     public function __construct(
         private EventService $eventService,
-        private SkillService $skillService
+        private SkillService $skillService,
+        private RankService $rankService,
     ) {}
 
     public function run(Shop $shop, string $action)
     {
+        $beforeRank = $this->rankService->getRank($shop);    
+
         // -----------------------------
         // イベント
         // -----------------------------
@@ -132,6 +136,13 @@ class BusinessService
                     break;
             }
         }
+        
+        // 最新状態を取得
+        $shop->refresh();
+        $shop->load('shopSkills.skill');
+        // ランク判定
+        $afterRank = $this->rankService->getRank($shop);
+        $rankUp = $beforeRank !== $afterRank;
 
         // -----------------------------
         // 返却
@@ -146,7 +157,7 @@ class BusinessService
             'reputation' => $event['reputation'],
             'comment'    => $this->createComment($event['name'], $profit),
             'action'     => $actionMessage,
-            'rank_up'    => false,
+            'rank_up'    => $rankUp,
         ];
     }
 
